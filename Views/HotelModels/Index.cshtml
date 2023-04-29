@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Hotel_Room_Booking.Models.HotelModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<p class="d-flex justify-content-center">
+    <a class="btn btn-outline-light" asp-action="Create">Create New</a>
+</p>
+<br />
+<div class="row mb-4 d-flex justify-content-center">
+    <div class="col-md-6">
+        <form method="get" action="@Url.Action("Index", "HotelModels")">
+            <div class="input-group">
+                @Html.DropDownList("searchCity", (SelectList)ViewBag.Cities, "Around the globe", new { @class = "form-control" })
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mt-5">
+            <div class="customCard mb-4 mt-5">
+                <div class="imgBx">
+                    <img src="@item.Image">
+                </div>
+                <div class="content">
+                    <div class="details">
+                        <h2>@item.HotelName<br><span>@item.Description</span></h2>
+                        <div class="data">
+                            <h4>$@item.Price <span>/ Night</span></h4>
+                        </div>
+                        <div class="actionBtn">
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.HotelId">Edit</a>
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.HotelId">Details</a>
+                            @if (item.Rooms == 20)
+                            {
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.HotelId">Delete</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+

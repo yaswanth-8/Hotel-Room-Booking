@@ -1,0 +1,33 @@
+﻿<h2>Reviews</h2>
+
+@if (ViewBag.reviews==null)
+{
+    <p>No reviews found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User Email</th>
+                <th>Review</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.reviews)
+            {
+                <tr>
+                    <td>@item.UserEmail</td>
+                    <td>@item.Reviews</td>
+                    <td>
+                        @for(int i = 0; i < item.Ratings; i++)
+                        {
+                            <span>*</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
