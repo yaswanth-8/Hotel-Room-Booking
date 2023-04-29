@@ -23,7 +23,8 @@ namespace Hotel_Room_Booking.Controllers
         public async Task<IActionResult> Index(string searchCity)
         {
             var hotels = await _context.HotelModel.ToListAsync();
-            var cities = new SelectList(hotels.Select(h => h.City).Distinct());
+            var cities = new SelectList(hotels.Select(h => h.City).Distinct().OrderBy(c => c));
+
             ViewBag.Cities = cities;
             if (!string.IsNullOrEmpty(searchCity))
             {
