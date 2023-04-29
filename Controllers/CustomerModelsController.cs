@@ -181,8 +181,42 @@ namespace Hotel_Room_Booking.Controllers
             return View();
         }
 
+        //Profile Section
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var customer = await _context.CustomerModel
+                .Include(c => c.Hotel)
+                .FirstOrDefaultAsync(c => c.User == user);
 
-        private bool CustomerModelExists(int id)
+            if (customer == null)
+            {
+                return RedirectToAction("EmptyProfile");
+            }
+
+            return View(customer);
+        }
+
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var customer = await _context.CustomerModel.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            _context.CustomerModel.Remove(customer);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "HotelModels");
+        }
+
+        public IActionResult EmptyProfile()
+        {
+            return View();
+        }
+
+            private bool CustomerModelExists(int id)
         {
           return (_context.CustomerModel?.Any(e => e.CustomerId == id)).GetValueOrDefault();
         }
