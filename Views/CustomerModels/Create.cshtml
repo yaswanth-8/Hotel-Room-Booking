@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="CheckIn" class="control-label"></label>
-                <input asp-for="CheckIn" class="form-control" />
+                <input asp-for="CheckIn" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="CheckIn" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,13 +31,11 @@
                 <span asp-validation-for="CheckOut" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
+                <input type="hidden" asp-for="Rating" class="form-control" value="empty" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Comments" class="control-label"></label>
-                <input asp-for="Comments" class="form-control" />
+                <input asp-for="Comments" class="form-control" type="hidden" value="empty" />
                 <span asp-validation-for="Comments" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,6 +48,24 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    $(function () {
+        // Get the CheckIn and CheckOut input fields
+        var checkInInput = $('input#CheckIn');
+        var checkOutInput = $('input#CheckOut');
+
+        // Set the minimum selectable date of CheckOut to be the same as CheckIn
+        checkOutInput.prop('min', checkInInput.val());
+
+        // Attach an event handler to the CheckIn input field
+        checkInInput.change(function () {
+            // Update the minimum selectable date of CheckOut to be the same as CheckIn
+            checkOutInput.prop('min', checkInInput.val());
+        });
+    });
+</script>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

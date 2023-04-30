@@ -1,0 +1,20 @@
+﻿<section class="title-template">
+    <h1 class="title">Add Review</h1>
+    <form class="contact-form row" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-field col-lg-3">
+            <label for="rating" class="control-label">Rating</label>
+            <input type="number" class="form-control" id="rating" name="rating" required/>
+        </div>
+        <div class="form-field col-lg-12 ">
+            <label for="comment" class="control-label">Comment</label>
+            <input type="text" class="form-control" id="comment" name="comment" required />
+        </div>
+        <div class="form-field">
+        <button class="submit-btn" type="submit" asp-action="addReview">Submit</button>
+        </div>
+        <div class="form-field">
+            <a class="btn submit-btn" asp-action="Profile">Back to Profile</a>
+        </div>
+    </form>
+</section>

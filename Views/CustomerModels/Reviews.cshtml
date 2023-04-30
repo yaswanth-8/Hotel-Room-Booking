@@ -1,33 +1,67 @@
-﻿<h2>Reviews</h2>
+﻿
+@{
+	int emptyCount = 0;
+	bool noReviews = false;
+	foreach(var item in ViewBag.reviews)
+	{
+		if (item.Reviews == "empty")
+		{
+			emptyCount++;
+		}
+	}
+		if(emptyCount == ViewBag.reviews.Count)
+		{
+			noReviews = true;
+		}
+}
 
-@if (ViewBag.reviews==null)
+
+@if (noReviews)
 {
-    <p>No reviews found.</p>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-center m-auto">
+				<div id="myCarousel" class="carousel slide">
+					
+							<div class="carousel-inner">
+								<div class="item carousel-item active">
+									<p class="testimonial">No Reviews Found !</p>
+								</div>
+				
+							</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>User Email</th>
-                <th>Review</th>
-                <th>Rating</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.reviews)
-            {
-                <tr>
-                    <td>@item.UserEmail</td>
-                    <td>@item.Reviews</td>
-                    <td>
-                        @for(int i = 0; i < item.Ratings; i++)
-                        {
-                            <span>*</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="container">
+	<div class="row">
+		<div class="col-md-8 col-center m-auto">
+			<div id="myCarousel" class="carousel slide">
+				<!-- Carousel -->
+                 @foreach (var item in ViewBag.reviews)
+				{
+						@if (item.Reviews != "empty")
+						{
+							<div class="carousel-inner">
+								<div class="item carousel-item active">
+									@for (int i = 0; i < item.Ratings; i++)
+									{
+										<span>&#9733;</span>
+									}
+									<p class="testimonial">@item.Reviews</p>
+									<p class="overview"><b>@item.UserEmail</b></p>
+								</div>
+							</div>
+
+							<hr />
+						}
+                }
+			</div>
+		</div>
+	</div>
+	</div>
 }

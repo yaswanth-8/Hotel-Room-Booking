@@ -216,7 +216,27 @@ namespace Hotel_Room_Booking.Controllers
             return View();
         }
 
-            private bool CustomerModelExists(int id)
+        public IActionResult addReview()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> addReview(int id, int rating, string comment)
+        {
+            // Find the customer record to update
+            var customer = await _context.CustomerModel.FindAsync(id);
+
+            // Update the ratings and comments
+            customer.Rating = rating;
+            customer.Comments = comment;
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            // Redirect to the profile page
+            return RedirectToAction("Profile");
+        }
+        private bool CustomerModelExists(int id)
         {
           return (_context.CustomerModel?.Any(e => e.CustomerId == id)).GetValueOrDefault();
         }

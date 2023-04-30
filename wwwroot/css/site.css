@@ -94,6 +94,7 @@ body {
 
 
 .title-template {
+    color:white;
     max-width: 800px;
     margin: 50px auto;
     position: relative;
@@ -253,3 +254,40 @@ body {
     transform: scale(1.15);
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
 }
+
+
+/*Reviews*/
+
+.col-center {
+    margin: 0 auto;
+    float: none !important;
+}
+
+.carousel {
+    margin: 40px auto;
+    padding: 0 70px;
+}
+
+.carousel-item {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    overflow: hidden;
+    min-height: 100px;
+}
+
+
+.carousel .overview {
+    font-style: italic;
+}
+
+    .carousel .overview b {
+        text-transform: uppercase;
+        font-size:small;
+        color: #db584e;
+    }
+
+.carousel hr{
+    color:white;
+}
+
