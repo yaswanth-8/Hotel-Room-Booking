@@ -5,6 +5,14 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+        @if (User.IsInRole("admin"))
+        {
+            <li class="nav-item">
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addAdminModal">
+                Add Admin
+            </button>
+        </li>
+        }
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
@@ -24,3 +32,30 @@ else
     </li>
 }
 </ul>
+<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog" aria-labelledby="addAdminModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAdminModalLabel">Add Admin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+    @using (Html.BeginForm("MakeAdmin", "CustomerModels", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+        </div>
+        <div class="form-group">
+             <label for="passoword">Password</label>
+             <input type="password" id="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Make Admin</button>
+    }
+            </div>
+        </div>
+    </div>
+</div>

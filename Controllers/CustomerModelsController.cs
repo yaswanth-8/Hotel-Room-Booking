@@ -62,19 +62,26 @@ namespace Hotel_Room_Booking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id,[Bind("CustomerId,HotelId,Rooms,CheckIn,CheckOut,Rating,Comments")] CustomerModel customerModel)
+        public async Task<IActionResult> Create(int id, [Bind("CustomerId,HotelId,Rooms,CheckIn,CheckOut,Rating,Comments")] CustomerModel customerModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
             customerModel.User = user;
             customerModel.HotelId = id;
-            Console.WriteLine();
-            Console.WriteLine(customerModel.HotelId+" "+customerModel.User.Id+" "+customerModel.CheckIn);
-            Console.WriteLine();
-                _context.Add(customerModel);
+            var hotel = await _context.HotelModel.FindAsync(id);
+
+            if (hotel != null)
+            {
+                hotel.Rooms -= customerModel.Rooms;
+                _context.Update(hotel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            }
+            _context.Add(customerModel);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: CustomerModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -185,17 +192,19 @@ namespace Hotel_Room_Booking.Controllers
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
-            var customer = await _context.CustomerModel
+            var customers = await _context.CustomerModel
                 .Include(c => c.Hotel)
-                .FirstOrDefaultAsync(c => c.User == user);
+                .Where(c => c.User == user)
+                .ToListAsync();
 
-            if (customer == null)
+            if (customers == null || customers.Count == 0)
             {
                 return RedirectToAction("EmptyProfile");
             }
 
-            return View(customer);
+            return View(customers);
         }
+
 
         public async Task<IActionResult> Cancel(int id)
         {
@@ -204,7 +213,14 @@ namespace Hotel_Room_Booking.Controllers
             {
                 return NotFound();
             }
+            var hotel = await _context.HotelModel.FindAsync(customer.HotelId);
 
+            if (hotel != null)
+            {
+                hotel.Rooms += customer.Rooms;
+                _context.Update(hotel);
+                await _context.SaveChangesAsync();
+            }
             _context.CustomerModel.Remove(customer);
             await _context.SaveChangesAsync();
 
@@ -236,6 +252,27 @@ namespace Hotel_Room_Booking.Controllers
             // Redirect to the profile page
             return RedirectToAction("Profile");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> MakeAdmin(string email, string password)
+        {
+            // Create a new user with the given email and password
+            var user = new IdentityUser { UserName = email, Email = email };
+            var result = await _userManager.CreateAsync(user, password);
+
+            // If the user was successfully created, add the "admin" role to their account
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "admin");
+                return RedirectToAction("Index", "Home");
+            }
+
+            // If there was an error creating the user, return an error message
+            ModelState.AddModelError(string.Empty, "Error creating user.");
+            return View();
+        }
+
+
         private bool CustomerModelExists(int id)
         {
           return (_context.CustomerModel?.Any(e => e.CustomerId == id)).GetValueOrDefault();

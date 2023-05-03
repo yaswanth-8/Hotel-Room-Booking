@@ -94,17 +94,19 @@ namespace Hotel_Room_Booking.Controllers
         // GET: HotelModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.HotelModel == null)
+            HotelModel hotel = new HotelModel();
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/HotelApi/"+id).Result;
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                string data = response.Content.ReadAsStringAsync().Result;
+                hotel = JsonConvert.DeserializeObject<HotelModel>(data);
             }
 
-            var hotelModel = await _context.HotelModel.FindAsync(id);
-            if (hotelModel == null)
+            if (id == null || hotel == null)
             {
                 return NotFound();
             }
-            return View(hotelModel);
+            return View(hotel);
         }
 
         // POST: HotelModels/Edit/5
@@ -114,6 +116,8 @@ namespace Hotel_Room_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("HotelId,City,Address,HotelName,Rooms,Image,Description,Price")] HotelModel hotelModel)
         {
+            string data = JsonConvert.SerializeObject(hotelModel);
+
             if (id != hotelModel.HotelId)
             {
                 return NotFound();
@@ -121,22 +125,8 @@ namespace Hotel_Room_Booking.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(hotelModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HotelModelExists(hotelModel.HotelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/HotelApi/" + id, content).Result;
                 return RedirectToAction(nameof(Index));
             }
             return View(hotelModel);
@@ -145,19 +135,21 @@ namespace Hotel_Room_Booking.Controllers
         // GET: HotelModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.HotelModel == null)
+
+            HotelModel hotel = new HotelModel();
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/HotelApi/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                hotel = JsonConvert.DeserializeObject<HotelModel>(data);
+            }
+
+            if (id == null ||hotel == null)
             {
                 return NotFound();
             }
 
-            var hotelModel = await _context.HotelModel
-                .FirstOrDefaultAsync(m => m.HotelId == id);
-            if (hotelModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(hotelModel);
+            return View(hotel);
         }
 
         // POST: HotelModels/Delete/5
@@ -165,17 +157,23 @@ namespace Hotel_Room_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.HotelModel == null)
+            HotelModel hotel = new HotelModel();
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/HotelApi/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                hotel = JsonConvert.DeserializeObject<HotelModel>(data);
+            }
+
+            if (hotel == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.HotelModel'  is null.");
             }
-            var hotelModel = await _context.HotelModel.FindAsync(id);
-            if (hotelModel != null)
+            if (hotel != null)
             {
-                _context.HotelModel.Remove(hotelModel);
+                HttpResponseMessage responseForDeletion = client.DeleteAsync(client.BaseAddress + "/HotelApi/" + id).Result;
             }
             
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -28,9 +28,12 @@
     {
         <div class="col-md-4 mt-5">
             <div class="customCard mb-4 mt-5">
-                <div class="imgBx">
-                    <img src="@item.Image">
-                </div>
+                    <div class="imgBx">
+                    <a href="@Url.Action("Details", "HotelModels", new { id = item.HotelId })">
+                        <img src="@item.Image">
+                    </a>
+                    </div>
+                
                 <div class="content">
                     <div class="details">
                         <h2>@item.HotelName<br><span>@item.Description</span></h2>
