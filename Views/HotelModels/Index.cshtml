@@ -9,13 +9,19 @@
         <a class="btn btn-outline-light" asp-action="Create">Create New</a>
     </p>
 }
+else
+{
+    <p class="d-flex justify-content-center">
+        <a class="btn btn-outline-secondary" id="check-weather-btn" data-bs-toggle="modal" data-bs-target="#weatherModal" style="color:white;">Check Weather</a>
+    </p>
+}
 
 <br />
 <div class="row mb-4 d-flex justify-content-center">
     <div class="col-md-6">
         <form method="get" action="@Url.Action("Index", "HotelModels")">
             <div class="input-group">
-                @Html.DropDownList("searchCity", (SelectList)ViewBag.Cities, "Around the globe", new { @class = "form-control" })
+                @Html.DropDownList("searchCity", (SelectList)ViewBag.Cities, "Around the globe", new { @class = "form-control", id = "searchCityDropdown" })
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
@@ -58,6 +64,56 @@
     }
 </div>
 
+<div class="modal fade transparent-modal" id="weatherModal" tabindex="-1" aria-labelledby="weatherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="weathercard">
+                    <div class="search">
+                        <input type="text" placeholder="enter city" spellcheck="false" id="searchCityInput">
+                        <button><img src="images/search.png"></button>
+                    </div>
+                    <div class="weather">
+                        <img src="images/rain.png" class="weather-icon">
+                        <h1 class="temp">22°c</h1>
+                        <h2 class="city">New York</h2>
+                        <div class="details2">
+                            <div class="col">
+                                <img src="images/humidity.png">
+                                <div>
+                                    <p class="humidity">50%</p>
+                                    <p>Humidity</p>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <img src="images/wind.png">
+                                <div>
+                                    <p class="wind">15 km/h</p>
+                                    <p>Wind Speed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+<script>
+    $(document).ready(function () {
+        $('#searchCityDropdown').on('change', function () {
+            var selectedCity = $(this).val();
+            localStorage.setItem('selectedCity', selectedCity);
+            $('#searchCityInput').val(selectedCity);
+        });
 
+        var selectedCity = localStorage.getItem('selectedCity');
+        if (selectedCity) {
+            $('#searchCityDropdown').val(selectedCity);
+            $('#searchCityInput').val(selectedCity);
+        }
+    });
+
+</script>

@@ -43,19 +43,41 @@ else
             </div>
             <div class="modal-body">
                 <div class="modal-body">
-    @using (Html.BeginForm("MakeAdmin", "CustomerModels", FormMethod.Post))
-    {
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email">
-        </div>
-        <div class="form-group">
-             <label for="passoword">Password</label>
-             <input type="password" id="password" name="password">
-        </div>
-        <button type="submit" class="btn btn-primary">Make Admin</button>
-    }
+                    @using (Html.BeginForm("MakeAdmin", "CustomerModels", FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control">
+                        </div>
+                        <div class="form-group text-right">
+                            <button type="submit" class="btn btn-primary" id="make_admin_btn">Make Admin</button>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script>
+        $(document).ready(function () {
+            $('#make_admin_btn').click(function (event) {
+                event.preventDefault(); // Prevent form submission
+                var password = $('#password').val();
+                var confirm_password = $('#confirm_password').val();
+                if (password !== confirm_password) {
+                    alert('Passwords do not match! Please try again.');
+                    return false;
+                }
+                // Submit form if passwords match
+                $('form').submit();
+            });
+        });
+    </script>

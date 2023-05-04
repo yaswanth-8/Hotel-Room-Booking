@@ -177,6 +177,7 @@ namespace Hotel_Room_Booking.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool HotelModelExists(int id)
         {
           return (_context.HotelModel?.Any(e => e.HotelId == id)).GetValueOrDefault();
