@@ -4,50 +4,48 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>CustomerModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<section class="title-template">
+    <h1 class="title">Book Now</h1>
+    <form asp-action="Create" class="contact-form row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+        <div class="form-field">
                 <input type="hidden" asp-for="HotelId" class ="form-control" value="2"></input>
             </div>
-            <div class="form-group">
+        <div class="form-field">
                 <label asp-for="Rooms" class="control-label"></label>
-                <input asp-for="Rooms" class="form-control" />
+            <input asp-for="Rooms" class="form-control" />
                 <span asp-validation-for="Rooms" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        <div class="form-field">
                 <label asp-for="CheckIn" class="control-label"></label>
-                <input asp-for="CheckIn" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <input asp-for="CheckIn" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="CheckIn" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        <div class="form-field">
                 <label asp-for="CheckOut" class="control-label"></label>
-                <input asp-for="CheckOut" class="form-control" />
+            <input asp-for="CheckOut" class="form-control" />
                 <span asp-validation-for="CheckOut" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Rating" class="form-control" value="empty" />
+        <div class="form-field">
+            <input type="hidden" asp-for="Rating" class="form-control"  value="empty" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input asp-for="Comments" class="form-control" type="hidden" value="empty" />
+        <div class="form-field">
+            <input asp-for="Comments" class="form-control" type="hidden" value="empty" />
                 <span asp-validation-for="Comments" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        <div class="d-flex justify-content-between">
+            <a class="btn btn-secondary" asp-action="Index">Back to List</a>
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
-    </div>
-</div>
+</section>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    
 </div>
+
 
 <script>
     $(function () {

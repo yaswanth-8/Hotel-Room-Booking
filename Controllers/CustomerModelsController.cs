@@ -27,7 +27,9 @@ namespace Hotel_Room_Booking.Controllers
         // GET: CustomerModels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CustomerModel.Include(c => c.Hotel);
+            var applicationDbContext = _context.CustomerModel
+                .Include(c => c.User)
+                .Include(c => c.Hotel);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -79,7 +81,7 @@ namespace Hotel_Room_Booking.Controllers
             _context.Add(customerModel);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Profile");
         }
 
 
