@@ -14,7 +14,7 @@
 			noReviews = true;
 		}
 }
-
+<a class="btn btn-secondary" asp-controller="HotelModels" asp-action="Details" asp-route-id="@ViewBag.hotelId" style="position:absolute;margin-right:200px;">Back</a>
 
 @if (noReviews)
 {
@@ -50,7 +50,7 @@ else
 								<div class="item carousel-item active">
 									@for (int i = 0; i < item.Ratings; i++)
 									{
-										<span>&#9733;</span>
+										<i class="fa-solid fa-star" style="color: #fae505;"></i>
 									}
 									<p class="testimonial">@item.Reviews</p>
 									<p class="overview"><b>@item.UserEmail</b></p>

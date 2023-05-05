@@ -1,4 +1,9 @@
-﻿
+﻿document.addEventListener('keydown', function (event) {
+    if (event.code === 'Backspace' && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+        window.history.back();
+    }
+});
+
 const apiKey = "efa9e80a20c8713bdbb5ae4e1f3b29db";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?appid=" + apiKey + "&units=metric";
 const searchBox = document.querySelector(".search input");
@@ -37,3 +42,7 @@ async function checkWeather(city) {
 searchBtn.addEventListener("click", () => {
     checkWeather(searchBox.value);
 })
+
+
+
+

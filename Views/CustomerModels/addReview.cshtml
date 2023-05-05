@@ -4,11 +4,11 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-field col-lg-3">
             <label for="rating" class="control-label">Rating</label>
-            <input type="number" class="form-control" id="rating" name="rating" required/>
+            <input type="number" class="form-control" id="rating" name="rating" autocomplete="off" required/>
         </div>
         <div class="form-field col-lg-12 ">
             <label for="comment" class="control-label">Comment</label>
-            <input type="text" class="form-control" id="comment" name="comment" required />
+            <input type="text" class="form-control" id="comment" name="comment" autocomplete="off" required />
         </div>
         <div class="form-field">
         <button class="submit-btn" type="submit" asp-action="addReview">Submit</button>

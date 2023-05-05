@@ -3,19 +3,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-@if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-{
-    <p class="d-flex justify-content-center">
-        <a class="btn btn-outline-light" asp-action="Create">Create New</a>
-    </p>
-}
-else
-{
-    <p class="d-flex justify-content-center">
-        <a class="btn btn-outline-secondary" id="check-weather-btn" data-bs-toggle="modal" data-bs-target="#weatherModal" style="color:white;">Check Weather</a>
-    </p>
-}
-
 <br />
 <div class="row mb-4 d-flex justify-content-center">
     <div class="col-md-6">
@@ -29,6 +16,18 @@ else
         </form>
     </div>
 </div>
+@if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+{
+    <p class="d-flex justify-content-center">
+        <a class="btn btn-outline-light" asp-action="Create">Create New</a>
+    </p>
+}
+else
+{
+    <p class="d-flex justify-content-center">
+        <a class="btn btn-outline-secondary" id="check-weather-btn" data-bs-toggle="modal" data-bs-target="#weatherModal" style="color:white;">Weather <i class="fa-solid fa-cloud"></i></a>
+    </p>
+}
 <div class="row">
     @foreach (var item in Model)
     {
@@ -70,7 +69,7 @@ else
             <div class="modal-body">
                 <div class="weathercard">
                     <div class="search">
-                        <input type="text" placeholder="enter city" spellcheck="false" id="searchCityInput">
+                        <input type="text" placeholder="enter city" spellcheck="false" id="searchCityInput" autocomplete="off">
                         <button><img src="images/search.png"></button>
                     </div>
                     <div class="weather">

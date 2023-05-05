@@ -184,7 +184,7 @@ namespace Hotel_Room_Booking.Controllers
                 .ToListAsync();
            
             ViewBag.reviews = reviews;
-
+            ViewBag.hotelId = id;
             return View();
         }
 
