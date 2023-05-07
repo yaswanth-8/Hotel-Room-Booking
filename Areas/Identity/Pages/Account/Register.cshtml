@@ -31,6 +31,23 @@
             </div>
     </form>
 </section>
+<section style="display: flex; justify-content: center; align-items: center;">
+    <div class="col-md-6 text-center">
+        <h3 style="color: white; margin: 0 auto;">Or</h3>
+        <hr />
+
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+            <div class="text-center">
+                <p>
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn btn-outline-light" name="provider" value="@provider.Name" title="Register using your @provider.DisplayName account">@provider.DisplayName  &nbsp; <i class="fa-brands fa-google"></i></button>
+                    }
+                </p>
+            </div>
+        </form>
+    </div>
+</section>
 
 
 @section Scripts {

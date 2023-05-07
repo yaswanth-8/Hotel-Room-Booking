@@ -18,6 +18,16 @@ namespace Hotel_Room_Booking
 
             builder.Services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = builder.Configuration["App:GoogleClientId"];
+                    Console.WriteLine();
+                    Console.WriteLine(builder.Configuration["App:GoogleClientId"] + " " + builder.Configuration["App:GoogleClientSecret"]);
+                    Console.WriteLine();
+                    options.ClientSecret = builder.Configuration["App:GoogleClientSecret"];
+                });
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
