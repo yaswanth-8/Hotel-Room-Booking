@@ -25,13 +25,35 @@ namespace Hotel_Room_Booking.Controllers
         }
 
         // GET: CustomerModels
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchHotel)
         {
-            var applicationDbContext = _context.CustomerModel
-                .Include(c => c.User)
-                .Include(c => c.Hotel);
-            return View(await applicationDbContext.ToListAsync());
+            var hotels = await _context.HotelModel
+                .Select(h => h.HotelName)
+                .ToListAsync();
+
+            ViewBag.Hotels = new SelectList(hotels.Distinct());
+
+            if (!string.IsNullOrEmpty(searchHotel) && hotels.Contains(searchHotel))
+            {
+                var customers = await _context.CustomerModel
+                    .Include(c => c.User)
+                    .Include(c => c.Hotel)
+                    .Where(c => c.Hotel.HotelName == searchHotel)
+                    .ToListAsync();
+
+                return View(customers);
+            }
+            else
+            {
+                var customers = await _context.CustomerModel
+                    .Include(c => c.User)
+                    .Include(c => c.Hotel)
+                    .ToListAsync();
+
+                return View(customers);
+            }
         }
+
 
         // GET: CustomerModels/Details/5
         public async Task<IActionResult> Details(int? id)

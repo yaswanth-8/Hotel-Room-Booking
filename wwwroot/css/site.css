@@ -22,6 +22,9 @@ body {
     overflow-y: scroll; 
 }
 
+
+/* Card */
+
 .customCard {
     color:black;
     position: relative;
@@ -408,3 +411,4 @@ body {
         height:38.3px;
     }
 
+/*Image*/
