@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Hotel_Room_Booking.Data;
 using Hotel_Room_Booking.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hotel_Room_Booking.Controllers
 {
@@ -67,6 +68,7 @@ namespace Hotel_Room_Booking.Controllers
             return View(hotelModel);
         }
 
+        [Authorize(Roles ="admin")]
         // GET: HotelModels/Create
         public IActionResult Create()
         {
@@ -77,6 +79,7 @@ namespace Hotel_Room_Booking.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("HotelId,City,Address,HotelName,Rooms,Image,Description,Price")] HotelModel hotelModel)
         {
@@ -92,6 +95,7 @@ namespace Hotel_Room_Booking.Controllers
         }
 
         // GET: HotelModels/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             HotelModel hotel = new HotelModel();
@@ -114,6 +118,7 @@ namespace Hotel_Room_Booking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("HotelId,City,Address,HotelName,Rooms,Image,Description,Price")] HotelModel hotelModel)
         {
             string data = JsonConvert.SerializeObject(hotelModel);
@@ -133,6 +138,7 @@ namespace Hotel_Room_Booking.Controllers
         }
 
         // GET: HotelModels/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
 
@@ -155,6 +161,7 @@ namespace Hotel_Room_Booking.Controllers
         // POST: HotelModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             HotelModel hotel = new HotelModel();

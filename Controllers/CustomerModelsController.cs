@@ -9,6 +9,8 @@ using Hotel_Room_Booking.Data;
 using Hotel_Room_Booking.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Hotel_Room_Booking.Controllers
 {
@@ -24,6 +26,7 @@ namespace Hotel_Room_Booking.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "admin")]
         // GET: CustomerModels
         public async Task<IActionResult> Index(string searchHotel)
         {
@@ -55,25 +58,7 @@ namespace Hotel_Room_Booking.Controllers
         }
 
 
-        // GET: CustomerModels/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.CustomerModel == null)
-            {
-                return NotFound();
-            }
-
-            var customerModel = await _context.CustomerModel
-                .Include(c => c.Hotel)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customerModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(customerModel);
-        }
-
+        [Authorize(Roles = "!admin")]
         // GET: CustomerModels/Create
         public IActionResult Create()
         {
@@ -103,101 +88,8 @@ namespace Hotel_Room_Booking.Controllers
             _context.Add(customerModel);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Profile");
+            return Redirect("https://buy.stripe.com/test_00gdRe6Oofdhe5OdQR");
         }
-
-
-        // GET: CustomerModels/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.CustomerModel == null)
-            {
-                return NotFound();
-            }
-
-            var customerModel = await _context.CustomerModel.FindAsync(id);
-            if (customerModel == null)
-            {
-                return NotFound();
-            }
-            ViewData["HotelId"] = new SelectList(_context.HotelModel, "HotelId", "Address", customerModel.HotelId);
-            return View(customerModel);
-        }
-
-        // POST: CustomerModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,HotelId,Rooms,CheckIn,CheckOut,Rating,Comments")] CustomerModel customerModel)
-        {
-            if (id != customerModel.CustomerId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(customerModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerModelExists(customerModel.CustomerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["HotelId"] = new SelectList(_context.HotelModel, "HotelId", "Address", customerModel.HotelId);
-            return View(customerModel);
-        }
-
-        // GET: CustomerModels/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.CustomerModel == null)
-            {
-                return NotFound();
-            }
-
-            var customerModel = await _context.CustomerModel
-                .Include(c => c.Hotel)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customerModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(customerModel);
-        }
-
-        // POST: CustomerModels/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.CustomerModel == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.CustomerModel'  is null.");
-            }
-            var customerModel = await _context.CustomerModel.FindAsync(id);
-            if (customerModel != null)
-            {
-                _context.CustomerModel.Remove(customerModel);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
 
         public async Task<IActionResult> Reviews(int id)
         {
@@ -213,6 +105,7 @@ namespace Hotel_Room_Booking.Controllers
         }
 
         //Profile Section
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -229,7 +122,7 @@ namespace Hotel_Room_Booking.Controllers
             return View(customers);
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Cancel(int id)
         {
             var customer = await _context.CustomerModel.FindAsync(id);
@@ -251,15 +144,19 @@ namespace Hotel_Room_Booking.Controllers
             return RedirectToAction("Index", "HotelModels");
         }
 
+        [Authorize]
         public IActionResult EmptyProfile()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult addReview()
         {
             return View();
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> addReview(int id, int rating, string comment)
         {
@@ -277,6 +174,7 @@ namespace Hotel_Room_Booking.Controllers
             return RedirectToAction("Profile");
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(string email, string password)
         {

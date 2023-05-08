@@ -4,7 +4,10 @@
     ViewData["Title"] = "Access denied";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="d-flex justify-content-center align-items-center vh-100" style="background-image: url('https://www.example.com/background-image.jpg'); background-size: cover; margin-top: -100px;">
+    <div class="text-center">
+        <h1 class="display-4 text-light">Oops! &nbsp;<i class="fa-regular fa-face-frown-open"></i></h1>
+        <p class="lead text-light mb-5">You don't have access to this page</p>
+        <a class="btn btn-outline-light btn-lg" asp-controller="HotelModels" asp-action="Index">Return</a>
+    </div>
+</div>
