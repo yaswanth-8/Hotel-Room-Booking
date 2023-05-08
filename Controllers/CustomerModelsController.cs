@@ -57,8 +57,6 @@ namespace Hotel_Room_Booking.Controllers
             }
         }
 
-
-        [Authorize(Roles = "!admin")]
         // GET: CustomerModels/Create
         public IActionResult Create()
         {
